@@ -1,17 +1,17 @@
 
-# course5assignment1
+# Documentation, Packaging, and Testing
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/proton-2022/course5assignment1/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/proton-2022/course5assignment1/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ar-safari/Documentation-Packaging-and-Testing/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ar-safari/Documentation-Packaging-and-Testing/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Note to peer-reviewer
 
-GitHub Action, instead of Travis CI, was used to build and test the package, due to credit requirement for the latter. YAML file can be found in [.github/workflows/R-CMD-check.yaml](https://github.com/proton-2022/course5assignment1/blob/main/.github/workflows/R-CMD-check.yaml).  
+GitHub Action, instead of Travis CI, was used to build and test the package, due to credit requirement for the latter. YAML file can be found in [.github/workflows/R-CMD-check.yaml](https://github.com/ar-safari/Documentation-Packaging-and-Testing/blob/main/.github/workflows/R-CMD-check.yaml).  
 
 ## Description 
 
-The goal of course5assignment1 is to to clean up earthquake data 
+The goal of "Documentation-Packaging-and-Testing" is to to clean up earthquake data 
 from NOAA, to visualize a subset of the data on a timeline, and to visualize data 
 in a map with annotations. 
 
@@ -20,7 +20,7 @@ in a map with annotations.
 ``` r
 # The development version of this package can be installed from github
 # install.package("devtools")
-devtools::install_github("proton-2022/course5assignment1")
+devtools::install_github("ar-safari/Documentation-Packaging-and-Testing")
 ```
 
 ## Usage 
@@ -32,7 +32,7 @@ The following are basic examples for how to use functions in this package:
 Prepare NOAA data for visualization. 
 
 ``` r
-library(course5assignment1)
+library(Documentation-Packaging-and-Testing)
 
 # use `eq_clean_data` to obtain a data.frame that can be used for visualization.
 data_raw <- readr::read_delim("./signif.txt") 
