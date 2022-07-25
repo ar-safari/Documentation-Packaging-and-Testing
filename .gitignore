@@ -1,0 +1,8 @@
+.Rproj.user
+inst/doc
+course5assignment1.Rcheck/
+course5assignment1*.tar.gz
+course5assignment1*.tgz
+
+
+.Rhistory
