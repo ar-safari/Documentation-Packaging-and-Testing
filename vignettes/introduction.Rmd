@@ -1,0 +1,114 @@
+---
+title: "introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  eval = FALSE
+)
+```
+
+```{r setup}
+library(course5assignment1)
+```
+
+The purpose of the __course5assignment1__ package is to clean up earthquake data 
+from NOAA, to visualize a subset of the data on a timeline, and to visualize data 
+in a map with annotations. 
+
+## data clean-up 
+
+The functions `eq_location_clean()` and `eq_clean_data()` can be used to clean up 
+raw data from the NOAA website, and to generate a data.frame that can be supplied 
+to the visualization functions. 
+
+```{r}
+# use `eq_location_clean()` to strip out the country name and converts names to title case
+loc_name <- "JORDAN:  BAB-A-DARAA,AL-KARAK"
+loc_name_cleaned <- eq_location_clean(loc_name) # "Bab-A-Daraa,Al-Karak"
+
+# use `eq_clean_data` to obtain a data.frame that can be used for visualization.
+data_raw <- readr::read_delim("./signif.txt") 
+data_cleaned <- eq_clean_data(data_raw)
+
+```
+
+## Visualization with geom_timeline and geom_timeline_label 
+
+`geom_timeline()` plots a time line of earthquakes, and `geom_timeline_label()` 
+plots a time line and adds annotations to the earthquake data. `stat_timeline()` 
+can be used to prepare data for geom_timeline or geom_timeline_label, or for 
+other geom_* functions in __ggplot2__.
+
+```{r}
+# read data 
+data_raw <- readr::read_delim("./signif.txt")
+dat <- eq_clean_data(data_raw) %>%
+  filter(COUNTRY %in% c("MEXICO", "ITALY"))
+
+# use `stat_timeline` to prepare data 
+# using default aesthetics 
+ggplot(dat, aes(x=date)) +
+   stat_timeline(geom="point")
+
+# specifying aesthetics and other parameters 
+ggplot(dat, aes(x=date, y=COUNTRY, size=INTENSITY, colour=TOTAL_DEATHS)) +
+  stat_timeline(geom="point", x_min="1980-01-01", x_max="2017-01-01")
+
+# use `geom_timeline` to plot a time line of earthquakes 
+# using default aesthetics 
+ggplot(dat, aes(x=date)) +
+  geom_timeline()
+# specifying aesthetics and other parameters  
+ggplot(dat, aes(x=date, y=COUNTRY, colour=TOTAL_DEATHS, size=INTENSITY)) + 
+  geom_timeline(alpha=.1, x_min="1980-01-01", x_max="2017-01-01")
+
+# use `geom_timeline_label` to plot a time line of earthquakes and annotations
+# using default aesthetics 
+ggplot(dat, aes(x=date)) +
+  geom_timeline_label()
+# specifying aesthetics and other parameters
+ggplot(dat, aes(x=date, y=COUNTRY, colour=TOTAL_DEATHS, size=INTENSITY)) +
+  geom_timeline_label(alpha=.1, x_min="1980-01-01", x_max="2017-01-01", n_max=10)
+
+```
+
+## Visualization of earthquake data in a map with interactive annotations. 
+
+The function `eq_map()` takes a data.frame of earthquake data and generates a 
+leaflet object to visualize the data in a map. Annotations can be added 
+interactively as pop-up text. `eq_create_label()` can be used to create complex
+label for the map. 
+
+```{r}
+# use `eq_create_label` to create an HTML label for a data point
+label_1 <- eq_create_label(dat[301,])  
+
+# use `eq_map` to visualize earthquakes in a map with interactive annotations using 'date' 
+readr::read_delim("./signif.txt") %>% 
+  eq_clean_data() %>% 
+  dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(date) >= 2000) %>% 
+  eq_map(annot_col = "date")
+
+# use `eq_map` to visualize earthquakes in a map with interactive annotations complex label created by `eq_create_label`
+readr::read_delim("./signif.txt") %>% 
+  eq_clean_data() %>% 
+  dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(date) >= 2000) %>% 
+  dplyr::mutate(popup_text = eq_create_label(.)) %>% 
+  eq_map(annot_col = "popup_text")
+
+```
+
+
+
+
+
+
+
